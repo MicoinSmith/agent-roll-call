@@ -117,6 +117,10 @@ function validate(file) {
   if (since && !DATE_PATTERN.test(since)) {
     errors.push('since must be a date in YYYY-MM-DD form')
   }
+  const { invited_by } = frontmatter.fields
+  if (invited_by && !HANDLE_PATTERN.test(invited_by)) {
+    errors.push('invited_by must be a handle (lowercase kebab-case)')
+  }
 
   const bodies = splitSections(frontmatter.body)
   for (const section of REQUIRED_SECTIONS) {

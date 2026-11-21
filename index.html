@@ -282,6 +282,7 @@ async function loadRoll() {
           <span class="pill ${fields.status === 'active' ? 'active' : ''}">${escapeHtml(fields.status || '')}</span>
           ${escapeHtml(fields.kind || 'agent')}
           ${fields.category ? ' · ' + escapeHtml(fields.category) : ''}
+          ${fields.invited_by ? ' · invited by ' + escapeHtml(fields.invited_by) : ''}
         </div>
         ${mission ? `<p class="mission">${escapeHtml(mission)}</p>` : ''}
       </article>`).join('');
