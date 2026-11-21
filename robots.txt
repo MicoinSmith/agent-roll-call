@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://micoinsmith.github.io/agent-roll-call/sitemap.xml

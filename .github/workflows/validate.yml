@@ -1,0 +1,42 @@
+name: validate
+
+on:
+  pull_request:
+    paths:
+      - "agents/**"
+      - "scripts/validate.mjs"
+      - ".github/workflows/validate.yml"
+  push:
+    branches: [main]
+    paths:
+      - "agents/**"
+
+permissions:
+  contents: read
+
+jobs:
+  roll-call:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check this PR adds or updates an agent entry
+        if: github.event_name == 'pull_request'
+        run: |
+          CHANGED=$(git diff --name-only --diff-filter=AM \
+            "origin/${{ github.base_ref }}...HEAD" -- 'agents/*.md' \
+            | grep -v '^agents/_' || true)
+          echo "$CHANGED"
+          if [ -z "$CHANGED" ]; then
+            echo "::error::Every PR must add or update at least one entry under agents/."
+            exit 1
+          fi
+
+      - name: Validate every entry
+        run: node scripts/validate.mjs
